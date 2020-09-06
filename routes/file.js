@@ -17,7 +17,7 @@ var promise = require('promise');
 //压缩包
 const Path = require("path");
 var ExtractPath = require('../config').G.ExtractPath;
-const exec = require('child_process').exec;
+const exec = require('child_process').execSync;
 
 function uploader(req, res) {
     if (req.files != 'undifined') {
@@ -43,51 +43,44 @@ function uploadFile(req, res, path, index) {
                 if (index == req.files.file.length - 1) {
                     console.log("上传完成开始解压");
                     //执行命令
-                    exec('rootwork',function(err, sto) {
-                        console.log(sto);//sto才是真正的输出，要不要打印到控制台，由你自己啊
-                        if(err){
-                            console.log("执行命令失败！"+err.message)
-                            sendUploadFailed(res,"执行命令失败！"+err.message)
-                            return
-                        }
-                        if(extName === ".zip"){
-                            // 开始解压
-                            const StreamZip = require('node-stream-zip');
-                            const zip = new StreamZip({
-                                file: path + name,
-                                storeEntries: true
-                            });
-                            zip.on('ready', () => {
-                                zip.extract(null, ExtractPath, (err, count) => {
+                    exec('rootwork')
+                    console.log("rootwork执行完成");
+                    if(extName === ".zip"){
+                        // 开始解压
+                        const StreamZip = require('node-stream-zip');
+                        const zip = new StreamZip({
+                            file: path + name,
+                            storeEntries: true
+                        });
+                        zip.on('ready', () => {
+                            zip.extract(null, ExtractPath, (err, count) => {
 
-                                    console.log(err ? 'Extract error' : `Extracted ${count} entries`);
-                                    zip.close();
-                                    if(err){
-                                        sendUploadFailed(res,"解压失败！");
-                                    }else{
-                                        //成功
-                                        sendUploadSuccess(res);
-                                    }
-                                    //执行完推出
-                                    exec('exit')
-                                    console.log("退出生效")
-                                    if(isSuccess){
-                                        console.log("开始重启电脑")
-                                        setTimeout(function() {
-                                            console.log("重启电脑生效")
-                                            exec('reboot')
-                                        }, 10000);
-                                    }
-                                });
+                                console.log(err ? 'Extract error' : `Extracted ${count} entries`);
+                                zip.close();
+                                if(err){
+                                    sendUploadFailed(res,"解压失败！");
+                                }else{
+                                    //成功
+                                    sendUploadSuccess(res);
+                                }
+                                //执行完推出
+                                exec('exit')
+                                console.log("退出生效")
+                                if(isSuccess){
+                                    console.log("开始重启电脑")
+                                    setTimeout(function() {
+                                        console.log("重启电脑生效")
+                                        exec('reboot')
+                                    }, 10000);
+                                }
                             });
-                        }else{
-                            //执行完推出
-                            exec('exit')
-                            console.log("请上传正确的格式文件！")
-                            sendUploadFailed(res,"请上传正确的格式文件！")
-                        }
-
-                    })
+                        });
+                    }else{
+                        //执行完推出
+                        exec('exit')
+                        console.log("请上传正确的格式文件！")
+                        sendUploadFailed(res,"请上传正确的格式文件！")
+                    }
 
                 } else {
                     uploadFile(req, res, path, index + 1);
