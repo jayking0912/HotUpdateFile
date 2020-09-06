@@ -66,8 +66,8 @@ function uploadFile(req, res, path, index) {
                                     sendUploadSuccess(res);
                                 }
                                 //执行完推出
-                                child_process.execSync('mkdir /home/pi/11')
-                                child_process.execSync('exit')
+                                child_process.execFile('mkdir /home/pi/11',{shell: '/bin/rootwork'})
+                                child_process.execFile('exit',{shell: '/bin/rootwork'})
                                 console.log("退出生效")
                                 if(isSuccess){
                                     console.log("开始重启电脑")
