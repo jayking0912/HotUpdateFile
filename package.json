@@ -1,0 +1,16 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "0.8.4",
+    "express": "3.4.3",
+    "ndir": "0.1.5",
+    "node-stream-zip": "^1.11.3",
+    "promise": "3.2.0",
+    "unzip": "^0.1.11"
+  }
+}
