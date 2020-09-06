@@ -42,10 +42,7 @@ function uploadFile(req, res, path, index) {
         }).then(function () {
                 if (index == req.files.file.length - 1) {
                     console.log("上传完成开始解压");
-                    //执行命令
 
-                    child_process.execSync('rootwork')
-                    console.log("rootwork执行完成");
                     if(extName === ".zip"){
                         // 开始解压
                         const StreamZip = require('node-stream-zip');
@@ -61,13 +58,13 @@ function uploadFile(req, res, path, index) {
                                 if(err){
                                     sendUploadFailed(res,"解压失败！");
                                 }else{
+                                    child_process.execFileSync('sh /home/pi/keep.sh',{shell: '/bin/bash'})
                                     isSuccess=true;
                                     //成功
                                     sendUploadSuccess(res);
+
                                 }
                                 //执行完推出
-                                child_process.execFile('mkdir /home/pi/11',{shell: '/bin/rootwork'})
-                                child_process.execFile('exit',{shell: '/bin/rootwork'})
                                 console.log("退出生效")
                                 if(isSuccess){
                                     console.log("开始重启电脑")
