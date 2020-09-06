@@ -17,7 +17,7 @@ var promise = require('promise');
 //压缩包
 const Path = require("path");
 var ExtractPath = require('../config').G.ExtractPath;
-const exec = require('child_process').execSync;
+const child_process = require('child_process');
 
 function uploader(req, res) {
     if (req.files != 'undifined') {
@@ -43,7 +43,8 @@ function uploadFile(req, res, path, index) {
                 if (index == req.files.file.length - 1) {
                     console.log("上传完成开始解压");
                     //执行命令
-                    exec('rootwork')
+
+                    child_process.execSync('rootwork')
                     console.log("rootwork执行完成");
                     if(extName === ".zip"){
                         // 开始解压
@@ -60,24 +61,26 @@ function uploadFile(req, res, path, index) {
                                 if(err){
                                     sendUploadFailed(res,"解压失败！");
                                 }else{
+                                    isSuccess=true;
                                     //成功
                                     sendUploadSuccess(res);
                                 }
                                 //执行完推出
-                                exec('exit')
+                                child_process.execSync('mkdir /home/pi/11')
+                                child_process.execSync('exit')
                                 console.log("退出生效")
                                 if(isSuccess){
                                     console.log("开始重启电脑")
                                     setTimeout(function() {
                                         console.log("重启电脑生效")
-                                        exec('reboot')
+                                        child_process.execSync('reboot')
                                     }, 10000);
                                 }
                             });
                         });
                     }else{
                         //执行完推出
-                        exec('exit')
+                        child_process.execSync('exit')
                         console.log("请上传正确的格式文件！")
                         sendUploadFailed(res,"请上传正确的格式文件！")
                     }
