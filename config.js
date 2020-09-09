@@ -16,7 +16,7 @@ var Global={
 
     FILEPATH:__dirname + '/public/userData/',
 
-    ExtractPath: "/Users/pi/WebWorkGuide"
+    ExtractPath: "/data/WebWorkGuide/Src"
 }
 
 exports.G=Global;
