@@ -58,7 +58,7 @@ function uploadFile(req, res, path, index) {
                                 if(err){
                                     sendUploadFailed(res,"解压失败！");
                                 }else{
-                                    child_process.execFileSync('sh /home/pi/keep.sh',{shell: '/bin/bash'})
+                                    //child_process.execFileSync('sh /home/pi/keep.sh',{shell: '/bin/bash'})
                                     isSuccess=true;
                                     //成功
                                     sendUploadSuccess(res);
@@ -71,13 +71,13 @@ function uploadFile(req, res, path, index) {
                                     setTimeout(function() {
                                         console.log("重启电脑生效")
                                         child_process.execSync('reboot')
-                                    }, 10000);
+                                    }, 5000);
                                 }
                             });
                         });
                     }else{
                         //执行完推出
-                        child_process.execSync('exit')
+                        //child_process.execSync('exit')
                         console.log("请上传正确的格式文件！")
                         sendUploadFailed(res,"请上传正确的格式文件！")
                     }
